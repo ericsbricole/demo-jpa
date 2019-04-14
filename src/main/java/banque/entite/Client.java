@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +21,7 @@ public class Client {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="CLIENT_ID")
+	@Column(name="ID")
 	private Integer id;
 	@Column(name="NOM")
 	private String nom;
@@ -35,7 +36,7 @@ public class Client {
 	@ManyToOne
 	@JoinColumn(name="BANK_ID")
 	private Banque banque;
-	@OneToMany
+	@ManyToMany(mappedBy="clients")
 	private List<Compte> comptes;
 	
 	

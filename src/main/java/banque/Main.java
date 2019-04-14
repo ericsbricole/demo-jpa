@@ -18,6 +18,7 @@ import banque.entite.Client;
 import banque.entite.Compte;
 import banque.entite.LivretA;
 import banque.entite.Operation;
+import banque.entite.Virement;
 
 public class Main {
 
@@ -28,33 +29,45 @@ public class Main {
 			EntityTransaction et = em.getTransaction();
 			et.begin();
 			
-			Banque b = new Banque("SwissBank", null);
-			em.persist(b);
-			Adresse a = new Adresse(42, "rue Foo", 42000, "Cardiff");
-			Client aa = new Client("Astier", "Alexandre", LocalDate.of(1980, 12, 31), a, b, null);
+			Banque banque = new Banque("Banque Postale", null);
+			em.persist(banque);
+			Adresse adresse = new Adresse(42, "rue Foo", 42000, "Cardiff");
+			Client alexandre = new Client("Astier", "Alexandre", LocalDate.of(1980, 12, 31), adresse, banque, null);
+			em.persist(alexandre);
 			
-			Compte compte0 = new Compte("0000001",10000d, aa, null);
-			Operation o0 = new Operation(LocalDateTime.of(2017, 01, 20, 01, 20), 10d, "anniversaire neveu", compte0);
-			Operation o1 = new Operation(LocalDateTime.of(2010, 03, 01, 10, 02), 50d, "tickets de train", compte0);
+			List<Client> clients = new ArrayList<>();
+			clients.add(alexandre);
+			Compte compte = new Compte("0000001",10000d, clients, null);
+			//opération et virement sur compte
+			Operation o0 = new Operation(LocalDateTime.of(2017, 01, 20, 01, 20), 10d, "anniversaire neveu", compte);
+			Operation o1 = new Virement(LocalDateTime.of(2010, 03, 01, 10, 02), 50d, "tickets de train", compte, "Tantine");
 			List<Operation> operations = new ArrayList<>(Arrays.asList(o0,o1));
-			o0.setDate(LocalDateTime.of(2017, 12, 01, 11, 00));
-			compte0.setOperations(operations);
+			compte.setOperations(operations);
 			em.persist(o0);
-			em.persist(compte0);
-			Compte compte1 = new LivretA("2", 230.21, aa, null, 0.05);
-//			Compte compte2 = new AssuranceVie("032156", 30000, aa, null, LocalDate.of(2018, 11, 02), 0.08);
-			em.persist(compte1);
-			List<Compte> comptes = new ArrayList<>(Arrays.asList(compte0));
-			aa.setComptes(comptes);
-			em.persist(aa);
+			em.persist(o1);
+			em.persist(compte);
 			
-			List<Client> clients = new ArrayList<>(Arrays.asList(aa));
+			banque.setClients(clients);
 			
-			b.setClients(clients);
+			//compte sera associé à 2 clients
+			Client arthur = new Client("Pendragon", "Arthur", LocalDate.of(1980, 12, 2), adresse, banque, null);
+			em.persist(arthur);
+			clients.add(arthur);
+			compte.setClients(clients);
 			
 			
+			//alexandre aura 3 comptes de type différent
+			Compte livretA = new LivretA("0000002", 230.21, new ArrayList<Client>(), null, 0.01);
+			Compte assuranceVie = new AssuranceVie("0000003", 50_000d, new ArrayList<Client>(), operations, LocalDate.of(2022, 01, 25), 0.05);
+			livretA.addClient(alexandre);
+			assuranceVie.addClient(alexandre);
+			em.persist(livretA);
+			em.persist(assuranceVie);
+			
+
 			et.commit();
 			em.close();
+			
 		}
 		
 }

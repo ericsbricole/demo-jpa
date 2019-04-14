@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,13 +23,20 @@ import javax.persistence.Table;
 public class Compte {
 
 	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	protected Integer id;
+	
 	@Column(name="NUMERO")
 	protected String numero;
 	@Column(name="SOLDE")
 	protected Double solde;
-	@ManyToOne
-	@JoinColumn(name="CLIENT_ID")
-	protected Client client;
+	@ManyToMany
+	@JoinTable(name="CLIENT_COMPTE",
+	joinColumns=@JoinColumn(name="ID_COMPTE",referencedColumnName="ID"),
+	inverseJoinColumns=@JoinColumn(name="ID_CLIENT",referencedColumnName="ID")
+	)
+	protected List<Client> clients;
 	@OneToMany(mappedBy="compte")
 	protected List<Operation> operations;
 	
@@ -34,11 +44,11 @@ public class Compte {
 		super();
 	}
 	
-	public Compte(String numero, Double solde, Client client, List<Operation> operations) {
+	public Compte(String numero, Double solde, List<Client> clients, List<Operation> operations) {
 		super();
 		this.numero = numero;
 		this.solde = solde;
-		this.client = client;
+		this.clients = clients;
 		this.operations = operations;
 	}
 	
@@ -54,11 +64,12 @@ public class Compte {
 	public void setSolde(Double solde) {
 		this.solde = solde;
 	}
-	public Client getClient() {
-		return client;
+	public List<Client> getClients() {
+		return clients;
 	}
-	public void setClient(Client client) {
-		this.client = client;
+
+	public void setClients(List<Client> clients) {
+		this.clients = clients;
 	}
 	public List<Operation> getOperations() {
 		return operations;
@@ -67,5 +78,8 @@ public class Compte {
 		this.operations = operations;
 	}
 	
+	public void addClient(Client client) {
+		clients.add(client);
+	}
 	
 }

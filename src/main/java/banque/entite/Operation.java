@@ -36,11 +36,9 @@ public class Operation {
 	protected Compte compte;
 	
 	
-	public Operation() {
-		super();
-	}
+	public Operation() { }
+	
 	public Operation(LocalDateTime date, Double montant, String motif, Compte compte) {
-		super();
 		this.date = date;
 		this.montant = montant;
 		this.motif = motif;

@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class AssuranceVie extends LivretA {
+public class AssuranceVie extends Compte {
 
 	@Column(name="DATE_FIN")
 	private LocalDate dateFin;
@@ -17,11 +17,10 @@ public class AssuranceVie extends LivretA {
 	
 	
 	public AssuranceVie() {
-		super();
 	}
 	
-	public AssuranceVie(String numero, Double solde, Client client, List<Operation> operations, LocalDate dateFin, Double taux) {
-		super(numero, solde, client, operations, taux);
+	public AssuranceVie(String numero, Double solde, List<Client> clients, List<Operation> operations, LocalDate dateFin, Double taux) {
+		super(numero, solde, clients, operations);
 		this.dateFin = dateFin;
 		this.taux = taux;
 	}

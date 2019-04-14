@@ -12,11 +12,13 @@
 		<class>banque.entite.Compte</class>
 		<class>banque.entite.Operation</class>
 		<class>banque.entite.LivretA</class>
+		<class>banque.entite.AssuranceVie</class>
+		<class>banque.entite.Virement</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://bhygsgfoxniuf7kzgobz-mysql.services.clever-cloud.com:3306/bhygsgfoxniuf7kzgobz" />
-			<property name="javax.persistence.jdbc.user" value="u6t0iamosegxskpf" />
-			<property name="javax.persistence.jdbc.password" value="cuvn0V8Sz3QQBVqk6gN6" />
+				value="jdbc:mysql://localhost:3306/banque" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<!-- desactiver l'autodetection des classes de type @Entity -->
 			<property name="hibernate.archive.autodetection" value="" />
